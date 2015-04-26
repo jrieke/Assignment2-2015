@@ -63,6 +63,19 @@ app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 
+app.get('/location', ensureAuthenticated, function(req, res) {
+  res.render('location');
+});
+
+app.get('/activity', ensureAuthenticated, function(req, res) {
+  res.render('activity');
+});
+
+app.get('/compete', ensureAuthenticated, function(req, res) {
+  res.render('compete');
+});
+
+
 app.get('/igMediaCounts', ensureAuthenticated, function(req, res){
   
   Instagram.users.follows({ 
@@ -121,7 +134,7 @@ app.get('/auth/instagram',
   auth.passport.authenticate('instagram'));
 
 app.get('/auth/instagram/callback', 
-  auth.passport.authenticate('instagram', {successRedirect: '/account', failureRedirect: '/error'}));
+  auth.passport.authenticate('instagram', {successRedirect: '/location', failureRedirect: '/error'}));
 
 
 app.get('/logout', function(req, res){

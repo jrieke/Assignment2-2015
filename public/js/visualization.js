@@ -1,10 +1,10 @@
 var margin = {top: 20, right: 20, bottom: 100, left: 40};
-var width = 960 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var width = 800 - margin.left - margin.right;
+var height = 400 - margin.top - margin.bottom;
 
 //define scale of x to be from 0 to width of SVG, with .1 padding in between
 var scaleX = d3.scale.ordinal()
-  .rangeRoundBands([0, width], .1);
+  .rangeRoundBands([0, width], 0.1);
 
 //define scale of y to be from the height of SVG to 0
 var scaleY = d3.scale.linear()
@@ -20,14 +20,19 @@ var yAxis = d3.svg.axis()
   .orient("left");
 
 //create svg
-var svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
+var svg = d3.select("#chart")
+  // .attr("width", width + margin.left + margin.right)
+  // .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //get json object which contains media counts
 d3.json('/igMediaCounts', function(error, data) {
+  // Sort data
+  data.users.sort(function(a, b) {
+    return a.counts.media - b.counts.media;
+  });
+
   //set domain of x to be all the usernames contained in the data
   scaleX.domain(data.users.map(function(d) { return d.username; }));
   //set domain of y to be from 0 to the maximum media count returned
@@ -43,7 +48,7 @@ d3.json('/igMediaCounts', function(error, data) {
     .attr("dx", "-.8em")
     .attr("dy", ".15em")
     .attr("transform", function(d) {
-      return "rotate(-65)" 
+      return "rotate(-65)";
     });
 
   //set up y axis
