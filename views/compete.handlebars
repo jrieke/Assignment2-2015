@@ -4,5 +4,24 @@
 	<div class="col s2"><span class="page active">You vs Them</span></div>
 </div>
 <div class="section">
-	<img src="images/barplot.png" alt="barplot" class="responsive-img">
+	{{> loading_spinner}}
+
+	<div class="row" id="content">		
+
+		<div class="col s4">
+			<p>Media Count</p>
+			<div id="chart_media"></div>
+		</div>
+		<div class="col s4">
+			<p>Follows</p>
+			<div id="chart_follows"></div>
+		</div>
+		<div class="col s4">
+			<p>Followed By</p>
+			<div id="chart_followed_by"></div>
+		</div>
+		
+	</div>
 </div>
+
+<script type="text/javascript" src="js/compete.js"></script>

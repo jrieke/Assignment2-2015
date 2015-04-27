@@ -4,6 +4,13 @@
 	<div class="col s2"><a href="/compete"><span class="page">You vs Them</span></a></div>
 </div>
 <div class="section">
-	<svg id="chart" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid"></div>
-	<script src="js/visualization.js"></script>
+
+	{{> loading_spinner}}
+
+	<div id="content">
+		<svg id="chart" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid"></svg>
+	</div>
+
 </div>
+
+<script src="js/visualization.js"></script>

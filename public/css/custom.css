@@ -12,3 +12,10 @@
   color: #e91e63;
   font-weight: bold;
 }
+
+/* Style for world map */
+path {
+  stroke: white;
+  stroke-width: 0.5px;
+  fill: #d7ccc8;
+}

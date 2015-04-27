@@ -104,11 +104,79 @@ app.get('/igMediaCounts', ensureAuthenticated, function(req, res){
       // Execute all async tasks in the asyncTasks array
       async.parallel(asyncTasks, function(err){
         // All tasks are done now
+        // TODO: Error handling
         if (err) return err;
-        return res.json({users: mediaCounts});        
+        res.json({users: mediaCounts});        
       });
     }
   });
+});
+
+
+app.get('/followsImages', ensureAuthenticated, function(req, res) {
+
+  Instagram.users.follows({
+    user_id: req.user.instagram.id,
+    access_token: req.user.instagram.access_token,
+    complete: function(data) {
+
+      // an array of asynchronous functions
+      var asyncTasks = [];
+      var images = [];
+       
+      data.forEach(function(item){
+        asyncTasks.push(function(callback) {
+          // asynchronous function!
+          Instagram.users.recent({ 
+              user_id: item.id,
+              access_token: req.user.ig_access_token,
+              complete: function(data) {
+                data.forEach(function(item) {
+                  console.log(item);
+                  // TODO: Some images only have a location id and no long/lat. Query the coordinates for these via the /locations/location-id endpoint and include them in the images array
+                  if (item.location && item.location.longitude && item.location.latitude)
+                    images.push(item);
+                });
+                callback();
+              }
+            });            
+        });
+      });
+      
+      // Now we have an array of functions, each containing an async task
+      // Execute all async tasks in the asyncTasks array
+      async.parallel(asyncTasks, function(err){
+        // All tasks are done now
+        if (err) return err;
+        res.json({images: images});        
+      });
+
+    }
+  });
+
+});
+
+
+app.get('/randomFollows', ensureAuthenticated, function(req, res) {
+
+  Instagram.users.follows({
+    user_id: req.user.instagram.id,
+    access_token: req.user.instagram.access_token,
+    complete: function(data) {
+
+      // TODO: Check if this works correctly
+      var randomUser = data[Math.floor(Math.random()*(data.length+1))];
+
+      Instagram.users.info({ 
+        user_id: randomUser.id,
+        access_token: req.user.ig_access_token,
+        complete: function(data) {
+          res.json({user: data});
+        }
+      });
+    }
+  });
+
 });
 
 app.get('/visualization', ensureAuthenticated, function (req, res){

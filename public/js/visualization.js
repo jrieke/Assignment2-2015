@@ -1,3 +1,5 @@
+d3.select('#content').style('visibility', 'hidden');
+
 var margin = {top: 20, right: 20, bottom: 100, left: 40};
 var width = 800 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
@@ -71,4 +73,7 @@ d3.json('/igMediaCounts', function(error, data) {
     .attr("width", scaleX.rangeBand())
     .attr("y", function(d) { return scaleY(d.counts.media); })
     .attr("height", function(d) { return height - scaleY(d.counts.media); });
+
+  d3.select('#loading_spinner').style('display', 'none');
+  d3.select('#content').style('visibility', 'visible');
 });
