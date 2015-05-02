@@ -1,21 +1,54 @@
+body {
+	background-color: #f0f0f0
+}
+
+
 /* Remove margin below rows in Materialize */
 .row {
 	margin-bottom: 0px
 }
 
 .page {
-  color: #555555;
-  font-size: 16px;
+	color: #555555;
+	font-size: 16px;
 }
 
 .active {
-  color: #e91e63;
-  font-weight: bold;
+	color: #e91e63;
+	font-weight: bold;
 }
 
 /* Style for world map */
 path {
-  stroke: white;
-  stroke-width: 0.5px;
-  fill: #d7ccc8;
+	stroke: white;
+	stroke-width: 0.5px;
+	fill: #d7ccc8;
 }
+
+.d3-tip {
+	font-size: 0.7em;
+	/*border-color: #aaaaaa;*/
+	border-radius: 0.5px;
+	/*border-width: 1px;*/
+	/*border-style: solid;*/
+	padding: 5px;
+	background: white;
+	border-radius: 2px;
+	text-align: center;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+/*.d3-tip:after {
+	box-sizing: border-box;
+	display: inline;
+	font-size: 10px;
+	width: 100%;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.8);
+	content: "\25BC";
+	position: absolute;
+	text-align: center;
+}*/
+

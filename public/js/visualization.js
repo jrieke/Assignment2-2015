@@ -31,12 +31,15 @@ var svg = d3.select("#chart")
 //get json object which contains media counts
 d3.json('/igMediaCounts', function(error, data) {
   // Sort data
-  data.users.sort(function(a, b) {
-    return a.counts.media - b.counts.media;
-  });
+  // data.users.sort(function(a, b) {
+  //   return a.counts.media - b.counts.media;
+  // });
+console.log(data);
+
+  var unsorted_usernames = data.users.map(function(d) { return d.username; });
 
   //set domain of x to be all the usernames contained in the data
-  scaleX.domain(data.users.map(function(d) { return d.username; }));
+  scaleX.domain(unsorted_usernames);
   //set domain of y to be from 0 to the maximum media count returned
   scaleY.domain([0, d3.max(data.users, function(d) { return d.counts.media; })]);
 
@@ -64,16 +67,84 @@ d3.json('/igMediaCounts', function(error, data) {
     .style("text-anchor", "end")
     .text("Number of Photos");
 
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span style='color:brown; font-size: 2em;'>" + d.counts.media + "</span><br>" + d.full_name;
+    });
+
+  svg.call(tip);
+
   //set up bars in bar graph
   svg.selectAll(".bar")
     .data(data.users)
-    .enter().append("rect")
+    .enter()
+    .append("rect")
     .attr("class", "bar")
     .attr("x", function(d) { return scaleX(d.username); })
     .attr("width", scaleX.rangeBand())
     .attr("y", function(d) { return scaleY(d.counts.media); })
-    .attr("height", function(d) { return height - scaleY(d.counts.media); });
+    .attr("height", function(d) { return height - scaleY(d.counts.media); })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
 
   d3.select('#loading_spinner').style('display', 'none');
   d3.select('#content').style('visibility', 'visible');
+
+
+  var sorted_usernames = data.users.slice();
+  sorted_usernames.sort(function(a, b) {
+      return d3.ascending(a.counts.media, b.counts.media);
+    });
+  sorted_usernames = sorted_usernames.map(function(d) { return d.username; });
+
+  var sorted = false;
+
+  d3.select("#sort_button")
+    .on("click", function() {
+
+      if (!sorted) {
+
+        scaleX.domain(sorted_usernames);
+        var bars = svg.selectAll(".bar")
+          .sort(function(a, b) {return d3.ascending(a.counts.media, b.counts.media);})
+          
+        d3.select("#sort_button")
+          .text("Reset")
+          .attr("class", "btn waves-effect red right");
+
+      } else {
+
+        scaleX.domain(unsorted_usernames);
+        var bars = svg.selectAll(".bar");
+
+        d3.select("#sort_button")
+          .text("Sort")
+          .attr("class", "btn waves-effect green right");
+
+      }
+
+      bars.transition()
+          .duration(1000)
+          .attr("x", function(d) {
+            return scaleX(d.username);
+          });
+
+      svg.select(".x.axis")
+        .transition()
+        .duration(1000)
+        .call(xAxis)
+        .selectAll("text")  
+        .style("text-anchor", "end");
+
+      sorted = !sorted;
+
+    });
+
+  
+
 });
+
+
+

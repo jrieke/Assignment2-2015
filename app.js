@@ -132,7 +132,7 @@ app.get('/followsImages', ensureAuthenticated, function(req, res) {
               access_token: req.user.ig_access_token,
               complete: function(data) {
                 data.forEach(function(item) {
-                  console.log(item);
+                  // console.log(item);
                   // TODO: Some images only have a location id and no long/lat. Query the coordinates for these via the /locations/location-id endpoint and include them in the images array
                   if (item.location && item.location.longitude && item.location.latitude)
                     images.push(item);
