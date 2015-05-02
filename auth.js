@@ -9,8 +9,8 @@ var models = require('./models');
 dotenv.load();
 
 // Setup Instagram API
-Instagram.set('client_id', process.env.instagram_client_id);
-Instagram.set('client_secret', process.env.instagram_client_secret);
+Instagram.set('client_id', process.env.INSTAGRAM_CLIENT_ID);
+Instagram.set('client_secret', process.env.INSTAGRAM_CLIENT_SECRET);
 
 exports.passport = passport;
 exports.Instagram = Instagram;
@@ -30,9 +30,9 @@ passport.deserializeUser(function(obj, done) {
  * Configure passport to work with Instagram authentication
  */
 passport.use(new InstagramStrategy({
-    clientID: process.env.instagram_client_id,
-    clientSecret: process.env.instagram_client_secret,
-    callbackURL: process.env.instagram_callback_url
+    clientID: process.env.INSTAGRAM_CLIENT_ID,
+    clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
+    callbackURL: process.env.INSTAGRAM_CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {  // asynchronous
