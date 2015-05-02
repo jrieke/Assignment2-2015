@@ -1,5 +1,4 @@
 d3.select('#progress').style('visibility', 'visible');
-d3.select('#content').style('visibility', 'hidden');
 
 var margin = {top: 20, right: 20, bottom: 100, left: 40};
 var width = 800 - margin.left - margin.right;

@@ -1,18 +1,18 @@
 d3.select('#progress').style('visibility', 'visible');
-d3.select('#content').style('visibility', 'hidden');
 
 d3.json('/competitors', function(error, data) {
+	if (error)
+		console.log(error);
 
 	d3.select('#competitors')
 		.text('You vs. ' + data.user.username);
 
-	var cols = {};
-	cols['You'] = 'green';
-	cols[data.user.username] = 'red';
+	// var cols = {};
+	// cols['You'] = 'green';
+	// cols[data.user.username] = 'red';
 
 	var num_wins = 0;
 
-	// TODO: Handle error
 	var categories = ['media', 'follows', 'followed_by'];
 	categories.forEach(function(category) {
 		num_wins += (data.you.counts[category] >= data.user.counts[category]);

@@ -72,6 +72,9 @@ app.get('/compete', ensureAuthenticated, function(req, res) {
 });
 
 
+/*
+ * Send a JSON with the number of media counts for each user that is being followed.
+ */
 app.get('/mediaCounts', ensureAuthenticated, function(req, res){
   
   Instagram.users.follows({ 
@@ -100,7 +103,6 @@ app.get('/mediaCounts', ensureAuthenticated, function(req, res){
       // Execute all async tasks in the asyncTasks array
       async.parallel(asyncTasks, function(err){
         // All tasks are done now
-        // TODO: Error handling
         if (err) return err;
         res.json({users: mediaCounts});        
       });
@@ -109,6 +111,9 @@ app.get('/mediaCounts', ensureAuthenticated, function(req, res){
 });
 
 
+/*
+ * Send a JSON with the recent images and locations for all users that are being followed.
+ */
 app.get('/imageLocations', ensureAuthenticated, function(req, res) {
 
   Instagram.users.follows({
@@ -116,20 +121,16 @@ app.get('/imageLocations', ensureAuthenticated, function(req, res) {
     access_token: req.user.instagram.access_token,
     complete: function(data) {
 
-      // an array of asynchronous functions
       var asyncTasks = [];
       var images = [];
        
       data.forEach(function(item){
         asyncTasks.push(function(callback) {
-          // asynchronous function!
           Instagram.users.recent({ 
               user_id: item.id,
               access_token: req.user.ig_access_token,
               complete: function(data) {
                 data.forEach(function(item) {
-                  // console.log(item);
-                  // TODO: Some images only have a location id and no long/lat. Query the coordinates for these via the /locations/location-id endpoint and include them in the images array
                   if (item.location && item.location.longitude && item.location.latitude)
                     images.push(item);
                 });
@@ -139,10 +140,7 @@ app.get('/imageLocations', ensureAuthenticated, function(req, res) {
         });
       });
       
-      // Now we have an array of functions, each containing an async task
-      // Execute all async tasks in the asyncTasks array
       async.parallel(asyncTasks, function(err){
-        // All tasks are done now
         if (err) return err;
         res.json({images: images});        
       });
@@ -153,6 +151,9 @@ app.get('/imageLocations', ensureAuthenticated, function(req, res) {
 });
 
 
+/*
+ * Send a JSON with information about the instagram user itself and one random user that is being followed.
+ */
 app.get('/competitors', ensureAuthenticated, function(req, res) {
 
   var asyncTasks = [];
@@ -165,7 +166,6 @@ app.get('/competitors', ensureAuthenticated, function(req, res) {
       access_token: req.user.instagram.access_token,
       complete: function(data) {
 
-        // TODO: Check if this works correctly
         randomUser = data[Math.floor(Math.random()*(data.length+1))];
 
         Instagram.users.info({ 
@@ -196,9 +196,7 @@ app.get('/competitors', ensureAuthenticated, function(req, res) {
     if (err) 
       return res.redirect('/error');
     res.json({user: randomUser, you: you});
-  });
-
-  
+  });  
 
 });
 
@@ -219,7 +217,6 @@ app.get('/auth/instagram',
 app.get('/auth/instagram/callback', 
   auth.passport.authenticate('instagram', {successRedirect: '/location', failureRedirect: '/error'}));
 
-// TODO: Make logout button on main page
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
