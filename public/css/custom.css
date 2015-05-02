@@ -8,22 +8,35 @@ body {
 	margin-bottom: 0px
 }
 
+nav .active {
+	color: #ff4081;
+	font-weight: bold;
+}
+
+#instagram-icon {
+	margin: 0 auto;
+	background: url('/images/instagram.png') no-repeat;
+	background-size: 100%;
+	width: 80px;
+	height: 80px;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+	border-radius: 40px;
+
+}
+
+#instagram-icon:hover {
+	background: url('/images/instagram-pink.png') no-repeat;
+	background-size: 100%;
+
+}
+
 .page {
 	color: #555555;
 	font-size: 16px;
 }
 
-.active {
-	color: #e91e63;
-	font-weight: bold;
-}
-
-/* Style for world map */
-path {
-	stroke: white;
-	stroke-width: 0.5px;
-	fill: #d7ccc8;
-}
 
 .d3-tip {
 	font-size: 0.7em;
@@ -40,15 +53,42 @@ path {
 	-moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
-/*.d3-tip:after {
-	box-sizing: border-box;
-	display: inline;
-	font-size: 10px;
-	width: 100%;
-	line-height: 1;
-	color: rgba(0, 0, 0, 0.8);
-	content: "\25BC";
-	position: absolute;
-	text-align: center;
-}*/
+/* Location */
+.map path {
+	stroke: white;
+	stroke-width: 0.7px;
+	fill: #d0d0d0;
+}
 
+
+/* Activity */
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+
+/* Compete */
+#result {
+	margin-top: 50px;
+	font-size: 1.3em;
+}

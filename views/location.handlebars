@@ -1,19 +1,12 @@
-<div class="section">
-	<span class="page active">Location</span>
-	<a href="/activity"><span class="page" style="margin-left: 60px; margin-right: 60px">Activity</span></a>
-	<a href="/compete"><span class="page">You vs Them</span></a>
-</div>
-<div class="section">
-	<div>
+{{> navbar location='True'}}
 
-	{{> loading_spinner}}
+<div class="container section center-align">
 
 		<div id="content">
-			<svg id="chart" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid"></svg>
+			<svg id="chart" class="map" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid"></svg>
 		</div>
 
-		
-	</div>
+	
 </div>
 
 <script src="js/location.js"></script>

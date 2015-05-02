@@ -1,3 +1,4 @@
+d3.select('#progress').style('visibility', 'visible');
 d3.select('#content').style('visibility', 'hidden');
 
 var margin = {top: 20, right: 20, bottom: 100, left: 40};
@@ -29,13 +30,8 @@ var svg = d3.select("#chart")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //get json object which contains media counts
-d3.json('/igMediaCounts', function(error, data) {
-  // Sort data
-  // data.users.sort(function(a, b) {
-  //   return a.counts.media - b.counts.media;
-  // });
-console.log(data);
-
+d3.json('/mediaCounts', function(error, data) {
+  
   var unsorted_usernames = data.users.map(function(d) { return d.username; });
 
   //set domain of x to be all the usernames contained in the data
@@ -89,7 +85,7 @@ console.log(data);
     .on('mouseover', tip.show)
     .on('mouseout', tip.hide);
 
-  d3.select('#loading_spinner').style('display', 'none');
+  d3.select('#progress').style('visibility', 'hidden');
   d3.select('#content').style('visibility', 'visible');
 
 

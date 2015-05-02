@@ -1,4 +1,4 @@
-
+d3.select('#progress').style('visibility', 'visible');
 d3.select('#content').style('visibility', 'hidden');
 
 var projection = d3.geo.robinson();
@@ -35,7 +35,7 @@ d3.json('json/world-110m2.json', function(error, topology) {
 
 	d3.select('#content').style('visibility', 'visible');
 
-	d3.json('/followsImages', function(error, data) {
+	d3.json('/imageLocations', function(error, data) {
 		if (error)
 			console.log(error);
 
@@ -131,7 +131,7 @@ d3.json('json/world-110m2.json', function(error, topology) {
 
 // })); 
 			
-		d3.select('#loading_spinner').style('display', 'none');
+		d3.select('#progress').style('visibility', 'hidden');
 		d3.select('#content').style('visibility', 'visible');
 
 	});

@@ -50,18 +50,14 @@ function ensureAuthenticated(req, res, next) {
 }
 
 
-app.get('/', function(req, res){
-  res.render('login');
-});
-
 app.get('/login', function(req, res) {
   res.render('login');
 });
 
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', {user: req.user});
-});
 
+app.get('/', ensureAuthenticated, function(req, res){
+  res.redirect('/location');
+});
 
 app.get('/location', ensureAuthenticated, function(req, res) {
   res.render('location');
@@ -76,7 +72,7 @@ app.get('/compete', ensureAuthenticated, function(req, res) {
 });
 
 
-app.get('/igMediaCounts', ensureAuthenticated, function(req, res){
+app.get('/mediaCounts', ensureAuthenticated, function(req, res){
   
   Instagram.users.follows({ 
     user_id: req.user.instagram.id,
@@ -113,7 +109,7 @@ app.get('/igMediaCounts', ensureAuthenticated, function(req, res){
 });
 
 
-app.get('/followsImages', ensureAuthenticated, function(req, res) {
+app.get('/imageLocations', ensureAuthenticated, function(req, res) {
 
   Instagram.users.follows({
     user_id: req.user.instagram.id,
@@ -157,36 +153,55 @@ app.get('/followsImages', ensureAuthenticated, function(req, res) {
 });
 
 
-app.get('/randomFollows', ensureAuthenticated, function(req, res) {
+app.get('/competitors', ensureAuthenticated, function(req, res) {
 
-  Instagram.users.follows({
-    user_id: req.user.instagram.id,
-    access_token: req.user.instagram.access_token,
-    complete: function(data) {
+  var asyncTasks = [];
+  var randomUser;
+  var you;
 
-      // TODO: Check if this works correctly
-      var randomUser = data[Math.floor(Math.random()*(data.length+1))];
+  asyncTasks.push(function(callback) {
+    Instagram.users.follows({
+      user_id: req.user.instagram.id,
+      access_token: req.user.instagram.access_token,
+      complete: function(data) {
 
-      Instagram.users.info({ 
-        user_id: randomUser.id,
-        access_token: req.user.ig_access_token,
-        complete: function(data) {
-          res.json({user: data});
-        }
-      });
-    }
+        // TODO: Check if this works correctly
+        randomUser = data[Math.floor(Math.random()*(data.length+1))];
+
+        Instagram.users.info({ 
+          user_id: randomUser.id,
+          access_token: req.user.ig_access_token,
+          complete: function(data) {
+            randomUser = data;
+            callback();
+          }
+        });
+      }
+    });
   });
+
+  asyncTasks.push(function(callback) {
+    Instagram.users.info({
+      user_id: req.user.instagram.id,
+      access_token: req.user.instagram.access_token,
+      complete: function(data) {
+        you = data;
+        callback();
+      }
+    });
+  });
+
+  async.parallel(asyncTasks, function(err){
+    // All tasks are done now
+    if (err) 
+      return res.redirect('/error');
+    res.json({user: randomUser, you: you});
+  });
+
+  
 
 });
 
-app.get('/visualization', ensureAuthenticated, function (req, res){
-  res.render('visualization');
-}); 
-
-
-app.get('/c3visualization', ensureAuthenticated, function (req, res){
-  res.render('c3visualization');
-}); 
 
 /*
  * Simple error page with a button that redirects to /
@@ -204,7 +219,7 @@ app.get('/auth/instagram',
 app.get('/auth/instagram/callback', 
   auth.passport.authenticate('instagram', {successRedirect: '/location', failureRedirect: '/error'}));
 
-
+// TODO: Make logout button on main page
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
